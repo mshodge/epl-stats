@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import mechanicalsoup
 import time
 import pandas as pd
@@ -7,13 +8,6 @@ from tqdm import tqdm
 
 browser = mechanicalsoup.StatefulBrowser()
 
-try:
-	"""Try and load a previous dataframe first"""
-	df = pd.read_csv(os.path.join(os.getcwd(), 'data/premier_league_player_stats.csv'))
-except FileNotFoundError:
-	"""If none exist then create a blank dataframe"""
-	df = pd.DataFrame(columns=['id', 'name', 'position', 'nationality', 'clubs', 'seasons', 'num_of_seasons', 'apps', 'wins',
-								'losses', 'clean_sheets', 'assists', 'goals'])
 
 def get_overview(id):
 	"""Get the overview stats from the overview page"""
@@ -52,7 +46,8 @@ def get_overview(id):
 	num_of_seasons = len(seasons)
 	return name, nationality, position, clubs, seasons, num_of_seasons
 
-def get_stats(id, position):
+
+def get_stats(id):
 	"""Get the detailed stats from the stats page"""
 
 	browser.open(f"https://www.premierleague.com/players/{id}/player/stats")
@@ -76,9 +71,19 @@ def get_stats(id, position):
 	return clean_sheets, goals, assists, apps, wins, losses
 
 
-pbar = tqdm(range(4700,17000))
+try:
+	"""Try and load a previous dataframe first"""
+	df = pd.read_csv(os.path.join(os.getcwd(), 'data/premier_league_player_stats.csv'))
+except FileNotFoundError:
+	"""If none exist then create a blank dataframe"""
+	df = pd.DataFrame(columns=[
+		'id', 'name', 'position', 'nationality', 'clubs',
+		'seasons', 'num_of_seasons', 'apps', 'wins',
+		'losses', 'clean_sheets', 'assists', 'goals'
+	])
 
-for id in pbar:
+
+for id in tqdm(range(1, 17000)):
 	"""Run for all players"""
 
 	if id not in df.id.to_list():
@@ -86,16 +91,23 @@ for id in pbar:
 
 		name, nationality, position, clubs, seasons, num_of_seasons = get_overview(id)
 		if name is not None:
-			clean_sheets, goals, assists, apps, wins, losses = get_stats(id, position)
+
+			clean_sheets, goals, assists, apps, wins, losses = get_stats(id)
+
 			df_tmp = pd.DataFrame(
-				[[id, name, position, nationality, clubs, seasons, num_of_seasons, apps, wins, losses, clean_sheets, assists, goals]],
-				columns = ['id', 'name', 'position', 'nationality', 'clubs', 'seasons', 'num_of_seasons', 'apps', 'wins', 'losses', 'clean_sheets', 'assists', 'goals'])
+				[[
+					id, name, position, nationality, clubs, seasons,
+					num_of_seasons, apps, wins, losses, clean_sheets,
+					assists, goals
+				]],
+				columns = [
+					'id', 'name', 'position', 'nationality', 'clubs', 'seasons',
+					'num_of_seasons', 'apps', 'wins', 'losses', 'clean_sheets',
+					'assists', 'goals'])
+
 			df = df.append(df_tmp)
 
 		if id % 100 == 0:
 			"""Save every 100 calls"""
 			time.sleep(5)
 			df.to_csv(os.path.join(os.getcwd(), 'data/premier_league_player_stats.csv'), index=False)
-
-
-
