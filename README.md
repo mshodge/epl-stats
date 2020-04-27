@@ -14,8 +14,8 @@ A simple python tool to get (`get.py`) player stats for all players and seasons 
 | apps | The number of Premier League appearances |
 | wins | The number of Premier League wins |
 | losses | The number of Premier League losses |
-| clean_sheets | The number of Premier League clean sheetes |
+| clean_sheets | The number of Premier League clean sheets |
 | assists | The number of Premier League assists |
 | goals | The number of Premier League goals |
 
-More to be added in due course. For now, the complete dataset is available under `data/all.csv`. 
+More to be added in due course. For now, the complete data set is available under `data/all.csv`. 
