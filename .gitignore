@@ -1,0 +1,17 @@
+# named files
+.DS_Store
+.pyre_configuration
+Pipfile
+Pipfile.lock
+
+
+# named directories
+.idea
+__pycache__
+.pyre
+.couscous
+.hypothesis
+
+
+# wildcards
+*.log
