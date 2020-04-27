@@ -5,7 +5,7 @@ A simple python tool to get (`get.py`) player stats for all players and seasons 
 | column name        | desc           |
 | ------------|----------------|
 | id | Unique to the player on the website |
-| name | Th player's name |
+| name | The player's name |
 | position | Goalkeeper, Defender, Midfielder, or Forward |
 | nationality | The nation they choose to represent |
 | clubs | List of Premier League clubs they have played for |
